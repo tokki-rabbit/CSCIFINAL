@@ -1,7 +1,6 @@
 #include "../headers/map.h"
 #include <vector>
 #include <random>
-#include <limits.h>
 
  
 Map::Map(int p_npc_count = 0, int p_room_count = 0)
@@ -158,53 +157,50 @@ bool Map::isExplored(int row, int col)
     return false;
 }
 
-void Map::move(char dir)
+bool Map::move(char dir)
 {
-    while (true)
-    std::cin >> dir;
-    std::cin.ignore(std::numeric_limits<std::streamsize>max())
-        switch (dir)
+    switch (dir)
+    {
+        case('w'):
         {
-            case('w'):
-            {
-                if (this->isOnMap(player_position_.x, player_position_.y-1))
-                    player_position_.y = player_position_.y-1;
-                updateMap();
-                displayMap();
-                break;
-            }
-            case('a'):
-            {
-                if (this->isOnMap(player_position_.x-1, player_position_.y))
-                    player_position_.x = player_position_.x-1;
-                updateMap();
-                displayMap();
-                break;
-            }
-            case('s'):
-            {
-                if (this->isOnMap(player_position_.x, player_position_.y+1))
-                    player_position_.y = player_position_.y+1;
-                updateMap();
-                displayMap();
-                break;
-            }
-            case('d'):
-            {
-                if (this->isOnMap(player_position_.x+1, player_position_.y))
-                    player_position_.x = player_position_.x+1;
-                updateMap();
-                displayMap();
-                break;
-            }
-            case('q')
-            {
-                return;
-            }
-            default:
-            {
-                break;
-            }
+            if (this->isOnMap(player_position_.x, player_position_.y-1))
+                player_position_.y = player_position_.y-1;
+            updateMap();
+            displayMap();
+            break;
+        }
+        case('a'):
+        {
+            if (this->isOnMap(player_position_.x-1, player_position_.y))
+                player_position_.x = player_position_.x-1;
+            updateMap();
+            displayMap();
+            break;
+        }
+        case('s'):
+        {
+            if (this->isOnMap(player_position_.x, player_position_.y+1))
+                player_position_.y = player_position_.y+1;
+            updateMap();
+            displayMap();
+            break;
+        }
+        case('d'):
+        {
+            if (this->isOnMap(player_position_.x+1, player_position_.y))
+                player_position_.x = player_position_.x+1;
+            updateMap();
+            displayMap();
+            break;
+        }
+        case('q'):
+        {
+            return false;
+        }
+        default:
+        {
+            break;
         }
     }
+    return true;
 }

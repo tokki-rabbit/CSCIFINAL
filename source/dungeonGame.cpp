@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <random>
+#include <limits.h>
 #include "../headers/map.h"
 
 void merchantMenu()
@@ -22,9 +23,25 @@ void merchantMenu()
     
 }
 
-void mainMenu()
+void mainMenu(Map& map)
 {
-
+    short ans{};
+    do{
+        std::cout << "Choose an option: \n"<<
+        "1. Move\n"<<
+        "2. Exit\n";
+        std::cin >> ans;
+        if (ans == 1)
+        {
+            bool moveVar{true};
+            while(moveVar)
+            {
+                char dir{};
+                std::cin >> dir;
+                moveVar = map.move(dir);
+            }
+        }
+    }while(ans != 2);
 }
 
 int main()
@@ -37,7 +54,7 @@ int main()
     map.updateMap();
     map.displayMap();
     
-    mainMenu();
+    mainMenu(map);
 
 
     return 0;
