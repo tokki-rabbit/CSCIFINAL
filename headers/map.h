@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 #include <string>
 #include <random>
 
@@ -15,17 +16,21 @@ private:
 
     static const int num_rows_{12}; // number of rows in map
     static const int num_cols_{12}; // number of columns in map
-    static const int max_npcs_{12};  // max non-player characters
-    static const int max_rooms_{12}; // max number of rooms
+    static const int max_npcs_{5};  // max non-player characters
+    static const int max_rooms_{5}; // max number of rooms
 
-    int player_position_[2];              // player position (row,col)
     int dungeon_exit_[2];                 // exit location of the dungeon
-    struct pos{
-        unsigned short x{};
-        unsigned short y{};
+    struct Pos{
+        int x;
+        int y;
+        bool discovered;
+        Pos(int p_x= 0, int p_y = 0, bool p_discovered = false)
+        :x{p_x}, y{p_y}, discovered{p_discovered}
+        {}
     };
-    std::vector<pos> npc_positions_;
-    std::vector<pos> room_positions_;
+    Pos player_position_;             // player position (row,col)
+    std::vector<Pos> npc_positions_;
+    std::vector<Pos> room_positions_;
     char map_data_[num_rows_][num_cols_]; // stores the character that will be shown at a given (row,col)
 
     int npc_count_;  // stores number of misfortunes currently on map
@@ -35,12 +40,9 @@ public:
     Map(int p_npc_count, int p_room_count);
 
     void resetMap();
+    void initMap();
 
     //getters
-    int getPlayerRow();
-    int getPlayerCol();
-    int getDungeonExitRow();
-    int getDungeonExitCol();
     int getRoomCount();
     int getNPCCount();
     int getNumRows();
@@ -55,10 +57,11 @@ public:
     //setters
     void setPlayerPosition(int row, int col);
     void setDungeonExit(int row, int col);
+    void updateMap();
 
-    //other
+    //other 
     void displayMap();
-    bool move(char);
+    bool move(char dir);
     bool addNPC(int row, int col);
     bool addRoom(int row, int col);
     bool removeNPC(int row, int col);

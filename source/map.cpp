@@ -1,10 +1,14 @@
 #include "../headers/map.h"
+#include <vector>
 #include <random>
+#include <limits.h>
 
  
-Map::Map(int p_npc_count = 5, int p_room_count = 5)
-:npc_count_{p_npc_count}, room_count_{p_npc_count}
-{}
+Map::Map(int p_npc_count = 0, int p_room_count = 0)
+:npc_count_{p_npc_count}, room_count_{p_room_count}
+{
+    player_position_ = Pos();
+}
 
 void Map::resetMap()
 {
@@ -21,15 +25,186 @@ void Map::resetMap()
 
 bool Map::isNPCLocation(int row, int col)
 {
-    if 
+    for (const auto& pos : npc_positions_)
+    {
+        if (pos.y == row && pos.x == col)
+            return true;
+    }
+    return false;
+}
+
+bool Map::addNPC(int row, int col)
+{
+    npc_positions_.push_back(Pos(col, row, false));
+    return true;
+}
+
+bool Map::addRoom(int row, int col)
+{
+    room_positions_.push_back(Pos(col,row,false));
+    return true;
+}
+
+bool Map::isRoomLocation(int row, int col)
+{
+    for (const auto& pos : room_positions_)
+    {
+        if (pos.y == row && pos.x == col)
+            return true;
+    }
+    return false;
+}
+
+void Map::updateMap()
+{
+    //update the shown npc locations
+    for (auto& pos : npc_positions_)
+    {
+        if (player_position_.y == pos.y && player_position_.x == pos.x)
+            pos.discovered = true;
+        if (pos.discovered)
+            map_data_[pos.y][pos.x] = NPC;
+    }
+    //update the shown room locations
+    for (auto& pos : room_positions_)
+    {
+        if (pos.discovered)
+            map_data_[pos.y][pos.x] = EXPLORED;
+        else
+            map_data_[pos.y][pos.x] = ROOM;
+    }
 }
 
 void Map::randomizeMap(std::mt19937& mt)
 {
-    std::uniform_int_distribution<> distrib(0, 11);
-    for (int i{}; i < npc_count_; i)
+    std::uniform_real_distribution<> distrib(0.0, 1.0);
+    double probability{5.0/144.0};
+    //randomize the npc locations
+    while(npc_count_ < max_npcs_)
     {
-        int randCol{distrib(mt)}, randRow{distrib(mt)};
-        if (map_data_[randRow][randCol] )
+        for (int i{}; i < num_rows_; ++i)
+        {
+            for (int j{}; j < num_cols_; ++j)
+            {
+                if (distrib(mt) < probability && !isNPCLocation(i, j) && npc_count_ < max_npcs_)
+                {
+                    this->addNPC(i, j);
+                    ++npc_count_;
+                }
+            }
+        }
+    }
+    //randomize the room locations
+    while(room_count_ < max_rooms_)
+    {
+        for (int i{}; i < num_rows_; ++i)
+        {
+            for (int j{}; j < num_cols_; ++j)
+            {
+                if (distrib(mt) < probability && !isNPCLocation(i, j) && !isRoomLocation(i, j) && room_count_ < max_rooms_)
+                {
+                    this->addRoom(i, j);
+                    ++room_count_;
+                }
+            }
+        }
+    }
+}
+
+void Map::displayMap()
+{
+    for(int i{}; i < num_rows_; ++i)
+    {
+        for (int j{}; j < num_cols_; ++j)
+        {
+            if (j == player_position_.x && i == player_position_.y)
+                std::cout << PARTY;
+            else
+                std::cout << map_data_[i][j];
+        }
+        std::cout << '\n';
+    }
+}
+
+int Map::getRoomCount()
+{
+    return room_count_;
+}
+int Map::getNPCCount()
+{
+    return npc_count_;
+}
+int Map::getNumRows()
+{
+    return num_rows_;
+}
+int Map::getNumCols()
+{
+    return num_cols_;
+}
+    
+bool Map::isOnMap(int row, int col)
+{
+    if(row<0 || row>11 || col<0 || col>11)
+    {
+        return false;
+    }
+    return true;
+}
+bool Map::isExplored(int row, int col)
+{
+    if (map_data_[row][col] == EXPLORED)
+        return true;
+    return false;
+}
+
+void Map::move(char dir)
+{
+    while (true)
+    std::cin >> dir;
+    std::cin.ignore(std::numeric_limits<std::streamsize>max())
+        switch (dir)
+        {
+            case('w'):
+            {
+                if (this->isOnMap(player_position_.x, player_position_.y-1))
+                    player_position_.y = player_position_.y-1;
+                updateMap();
+                displayMap();
+                break;
+            }
+            case('a'):
+            {
+                if (this->isOnMap(player_position_.x-1, player_position_.y))
+                    player_position_.x = player_position_.x-1;
+                updateMap();
+                displayMap();
+                break;
+            }
+            case('s'):
+            {
+                if (this->isOnMap(player_position_.x, player_position_.y+1))
+                    player_position_.y = player_position_.y+1;
+                updateMap();
+                displayMap();
+                break;
+            }
+            case('d'):
+            {
+                if (this->isOnMap(player_position_.x+1, player_position_.y))
+                    player_position_.x = player_position_.x+1;
+                updateMap();
+                displayMap();
+                break;
+            }
+            case('q')
+            {
+                return;
+            }
+            default:
+            {
+                break;
+            }
+        }
     }
 }
