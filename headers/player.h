@@ -1,17 +1,19 @@
-
+//eric 
+#pragma once
 #include<iostream>
 #include<string>
+#include <vector>
 #include "item.h"
 
 class Player
 {
-private:
+public:
     std::string username;
     Weapon weapon;
 
-public:
-    
+    Player(std::string username = "", Weapon weapon = Weapon())
+    :username{username}, weapon{weapon}
+    {}
     void changeweapon(Weapon new_Weapon);
-    void inventory(Cookware num_cock, Weapon num_weapon, Armor num_armor);
     void track_gold();
 };

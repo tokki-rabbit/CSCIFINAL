@@ -165,32 +165,24 @@ bool Map::move(char dir)
         {
             if (this->isOnMap(player_position_.x, player_position_.y-1))
                 player_position_.y = player_position_.y-1;
-            updateMap();
-            displayMap();
             break;
         }
         case('a'):
         {
             if (this->isOnMap(player_position_.x-1, player_position_.y))
                 player_position_.x = player_position_.x-1;
-            updateMap();
-            displayMap();
             break;
         }
         case('s'):
         {
             if (this->isOnMap(player_position_.x, player_position_.y+1))
                 player_position_.y = player_position_.y+1;
-            updateMap();
-            displayMap();
             break;
         }
         case('d'):
         {
             if (this->isOnMap(player_position_.x+1, player_position_.y))
                 player_position_.x = player_position_.x+1;
-            updateMap();
-            displayMap();
             break;
         }
         case('q'):
