@@ -2,6 +2,8 @@
 #include<iostream>
 #include"player.h"
 #include <vector>
+#include "utils.h"
+#include <random>
 
 class Inventory
 {
@@ -42,15 +44,24 @@ public:
 class Party
 {
 public:
-    int fullness;
-    Inventory partyInventory;
-    Player player[4];
+    int roomscleared;
+    int angerlevel;
+    int keys;
 
-    Party(Inventory partyInventory, Player p_player[4], int fullness = 50)
-    :partyInventory{partyInventory}, fullness{fullness}
+    Inventory partyInventory;
+    std::vector<Player> players = std::vector<Player>(5);
+
+    Party(Inventory partyInventory, std::vector<Player> p_player = std::vector<Player>(5), int roomscleared = 0, int angerlevel = 0, int keys = 0)
+    :partyInventory{partyInventory}, roomscleared{roomscleared}, angerlevel{angerlevel}, keys{keys}
     {
-        for (int i{}; i < 4; ++i)
-            player[i] = p_player[i];
+        for (int i{}; i < 5; ++i)
+            players[i] = p_player[i];
     } 
+
+    void status();
+
+    void decPartyMembersFullness(std::mt19937& mt);
+    void killPartyMember(int partyMemberID);
+
 };
 

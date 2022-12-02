@@ -9,11 +9,10 @@ class Player
 {
 public:
     std::string username;
+    int fullness;
     Weapon weapon;
 
-    Player(std::string username = "", Weapon weapon = Weapon())
-    :username{username}, weapon{weapon}
+    Player(std::string username = "", Weapon weapon = Weapon(), int fullness = 50)
+    :username{username}, weapon{weapon}, fullness{fullness}
     {}
-    void changeweapon(Weapon new_Weapon);
-    void track_gold();
 };

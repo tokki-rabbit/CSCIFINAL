@@ -40,7 +40,7 @@ bool Map::addNPC(int row, int col)
 
 bool Map::addRoom(int row, int col)
 {
-    room_positions_.push_back(Pos(col,row,false));
+    room_positions_.push_back(Pos(col,row,true));
     return true;
 }
 
@@ -63,14 +63,41 @@ void Map::updateMap()
             pos.discovered = true;
         if (pos.discovered)
             map_data_[pos.y][pos.x] = NPC;
+        else if (!pos.discovered && map_data_[pos.y][pos.x] != UNEXPLORED)
+            map_data_[pos.y][pos.x] = EXPLORED;
     }
     //update the shown room locations
     for (auto& pos : room_positions_)
     {
-        if (pos.discovered)
+        if (!pos.discovered)
             map_data_[pos.y][pos.x] = EXPLORED;
         else
             map_data_[pos.y][pos.x] = ROOM;
+    }
+}
+
+void Map::explore()
+{
+    bool flag{false};
+    for(auto& k : room_positions_)
+    {
+        if (k.y == player_position_.y && k.x == player_position_.x)
+        {
+            k.discovered = false;
+            flag = true;
+        }
+    }
+    for(auto& k : npc_positions_)
+    {
+        if (k.y == player_position_.y && k.x == player_position_.x)
+        {
+            k.discovered = false;
+            flag = true;
+        }
+    }
+    if (!flag)
+    {
+        map_data_[player_position_.y][player_position_.x] = EXPLORED;
     }
 }
 
@@ -125,6 +152,18 @@ void Map::displayMap()
     }
 }
 
+void Map::setDungeonExit(int row, int col)
+{
+    map_data_[row][col] = EXIT;
+}
+
+bool Map::isDungeonExit(int row, int col)
+{
+    if (map_data_[row][col] == EXIT)
+        return true;
+    return false;
+}
+
 int Map::getRoomCount()
 {
     return room_count_;
@@ -141,7 +180,12 @@ int Map::getNumCols()
 {
     return num_cols_;
 }
-    
+
+Pos Map::getPlayerLocation()
+{
+    return player_position_;
+}
+
 bool Map::isOnMap(int row, int col)
 {
     if(row<0 || row>11 || col<0 || col>11)
@@ -154,6 +198,24 @@ bool Map::isExplored(int row, int col)
 {
     if (map_data_[row][col] == EXPLORED)
         return true;
+    return false;
+}
+bool Map::isDiscovered(int row, int col)
+{
+    for (const auto& k : room_positions_)
+    {
+        if (k.y == row && k.x == col)
+        {
+            return k.discovered;
+        }
+    }
+    for (const auto& k : npc_positions_)
+    {
+        if (k.y == row && k.x == col)
+        {
+            return k.discovered;
+        }
+    }
     return false;
 }
 

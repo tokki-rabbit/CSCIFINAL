@@ -49,10 +49,10 @@ void displayCookware(Inventory& inv)
 void displayArmor(Inventory& inv)
 {
     for(int i{}; i < inv.cookwareInventory.size(); ++i)
-        std::cout << i+1 << ". " <<  inv.armorInventory.at(i).name <<  " [" << inv.armorInventory.at(i).price << " gold] " << inv.armorInventory.at(i).defenseStat << "defense\n";
+        std::cout << i+1 << ". " <<  inv.armorInventory.at(i).name <<  " [" << inv.armorInventory.at(i).price << " gold] " << inv.armorInventory.at(i).defenseStat << " defense\n";
 }
 void displayWeapons(Inventory& inv)
 {
     for(int i{}; i < inv.weaponInventory.size(); ++i)
-        std::cout << i+1 << ". " <<  inv.weaponInventory.at(i).name <<  " [" << inv.weaponInventory.at(i).price << " gold] " << inv.weaponInventory.at(i).attackStat << "attack\n";
+        std::cout << i+1 << ". " <<  inv.weaponInventory.at(i).name <<  " [" << inv.weaponInventory.at(i).price << " gold] " << inv.weaponInventory.at(i).attackStat << " attack\n";
 }

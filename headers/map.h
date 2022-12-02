@@ -5,6 +5,15 @@
 #include <string>
 #include <random>
 
+struct Pos{
+    int x;
+    int y;
+    bool discovered;
+    Pos(int p_x= 0, int p_y = 0, bool p_discovered = false)
+    :x{p_x}, y{p_y}, discovered{p_discovered}
+    {}
+};
+
 class Map{
 private:
     const char UNEXPLORED {'-'}; // marker for unexplored spaces
@@ -20,14 +29,7 @@ private:
     static const int max_rooms_{5}; // max number of rooms
 
     int dungeon_exit_[2];                 // exit location of the dungeon
-    struct Pos{
-        int x;
-        int y;
-        bool discovered;
-        Pos(int p_x= 0, int p_y = 0, bool p_discovered = false)
-        :x{p_x}, y{p_y}, discovered{p_discovered}
-        {}
-    };
+
     Pos player_position_;             // player position (row,col)
     std::vector<Pos> npc_positions_;
     std::vector<Pos> room_positions_;
@@ -53,11 +55,14 @@ public:
     bool isExplored(int row, int col);
     bool isFreeSpace(int row, int col);
     bool isDungeonExit(int row, int col);
+    bool isDiscovered(int row, int col);
+    Pos getPlayerLocation();
 
     //setters
     void setPlayerPosition(int row, int col);
     void setDungeonExit(int row, int col);
     void updateMap();
+    void explore();
 
     //other 
     void displayMap();

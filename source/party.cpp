@@ -49,10 +49,52 @@ void Inventory::displayInventory()
         std::cout << "| " << k.name << ": " << k.num << " |";
     std::cout<<"\n| Armor       | ";
     for (auto& k : armorInventory)
-        std::cout << "| " << k.name << " :" << k.num << " |";
+        std::cout << "| " << k.name << ": " << k.num << " |";
     std::cout<<"\n| Treasures   | ";
     for (auto& k : treasureInventory)
         std::cout << "| " << k.name << ": " << k.num << " |";
     std::cout <<'\n';
     
+}
+
+void Party::status()
+{
+    std::cout << "\n+-------------+\n"<<
+    "| STATUS      |\n"<<
+    "+-------------+\n"<<
+    "| Rooms Cleared: " << roomscleared <<  " | Keys: " << keys << " | Anger Level: " << angerlevel << '\n';
+    partyInventory.displayInventory();
+    std::cout << "+-------------+\n"<<
+    "| PARTY       |\n"<<
+    "+-------------+\n";
+    for (int i{}; i < players.size(); ++i)
+    {
+        std::cout << "| " << players[i].username << " | Fullness: " << players[i].fullness << '\n';
+    }
+    std::cout << "+-------------+\n";
+
+}
+
+void Party::decPartyMembersFullness(std::mt19937& mt)
+{
+    for (int i{}; i < players.size(); ++i)
+    {
+        if(Utils::randomBool(0.20, mt))
+            players[i].fullness -=1;
+    }
+}
+
+void Party::killPartyMember(int partyMemberID)
+{
+    for (std::vector<Player>::iterator it{players.begin()}; it != players.end();)
+    {
+        if (partyMemberID == std::distance(players.begin(), it))
+        {
+            players.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
 }
