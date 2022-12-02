@@ -59,7 +59,7 @@ void Map::updateMap()
     //update the shown npc locations
     for (auto& pos : npc_positions_)
     {
-        if (player_position_.y == pos.y && player_position_.x == pos.x)
+        if (player_position_.y == pos.y && player_position_.x == pos.x && map_data_[pos.y][pos.x] != NPC)
             pos.discovered = true;
         if (pos.discovered)
             map_data_[pos.y][pos.x] = NPC;
@@ -159,7 +159,7 @@ void Map::setDungeonExit(int row, int col)
 
 bool Map::isDungeonExit(int row, int col)
 {
-    if (map_data_[row][col] == EXIT)
+    if (map_data_[row][col] == 'E')
         return true;
     return false;
 }

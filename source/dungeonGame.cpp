@@ -300,7 +300,7 @@ void NPCpuzzle(Party& party, Inventory& merchantInv, std::vector<Monster>& monst
 
     std::cout << "Answer this riddle for me:\n";
 
-    std::cout << questions[questionID] << '\n' << answers[questionID];
+    std::cout << questions[questionID] << '\n';
     short ans{};
     do{
         std::string answer{};
@@ -572,6 +572,7 @@ void mainMenu(Map& map, Party& party, Inventory& merchantInv, Pos& partyLocation
     "4. Cook and Eat\n"<<
     "5. Give up\n";
     std::cin >> ans;
+    std::cin.ignore(std::numeric_limits<short>::max(),'\n');
     Utils::ignoreLine();
     if (ans == 1)
     {
@@ -646,10 +647,9 @@ void update(Map& map, Party& party, Inventory& merchantInv, Pos& partyLocation, 
 
     if (party.roomscleared >= 5)
         map.setDungeonExit(11, 11);
-
     partyLocation = map.getPlayerLocation();
     
-    if (map.isDungeonExit(partyLocation.y, partyLocation.x));
+    if (map.isDungeonExit(partyLocation.y, partyLocation.x))
     {
         run = false;
         std::cout << "Congrats!!!! YOU WON!\n";
